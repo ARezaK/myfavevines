@@ -60,7 +60,7 @@ def generate_thumbnail(filename):
     success, image = vidcap.read()
     count = 0
 
-    while count < 50:
+    while count < 25:
         cv2.imwrite("%s.%s" % (filename.replace('.mp4', ''), file_format), image)  # save frame
         success, image = vidcap.read()
         count += 1
