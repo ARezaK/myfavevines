@@ -15,6 +15,8 @@ sys.setdefaultencoding('utf8')
 dir_path = os.path.dirname(os.path.abspath(__file__))
 print(dir_path)
 
+file_format = 'jpeg'
+
 WIDTH = 400
 HEIGHT = 200
 
@@ -40,13 +42,7 @@ display: block;
 }
 </style>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js" charset="utf-8"></script>
-<script src="http://luis-almeida.github.io/unveil/jquery.unveil.min.js" charset="utf-8"></script>
-<script>
 
-$(document).ready(function() {
-$('img').unveil(1000);
-});
-</script>
 </head>
 <body>
 {% for image in images %}
@@ -64,10 +60,11 @@ def generate_thumbnail(filename):
     success, image = vidcap.read()
     count = 0
 
-    while count < 100:
-        cv2.imwrite("%s.png" % filename.replace('.mp4', ''), image)  # save frame as JPEG file
+    while count < 50:
+        cv2.imwrite("%s.%s" % (filename.replace('.mp4', ''), file_format), image)  # save frame
         success, image = vidcap.read()
         count += 1
+    print("all done")
 
 
 @app.route('/<path:filename>')
@@ -99,12 +96,12 @@ def index():
             print(filename)
             if not filename.endswith('.mp4'):
                 continue
-            if not os.path.isfile(filename.replace('mp4', 'png')):
+            if not os.path.isfile(filename.replace('mp4', '%s' % file_format)):
                 # generate the image
-                print("need to generate png")
+                print("need to generate")
                 generate_thumbnail(filename=filename)
 
-            im = Image.open(filename.replace('.mp4', '.png'))
+            im = Image.open(filename.replace('mp4', '%s' % file_format))
             w, h = im.size
             aspect = 1.0*w/h
             if aspect > 1.0*WIDTH/HEIGHT:
@@ -116,7 +113,7 @@ def index():
             images.append({
                 'width': int(width),
                 'height': int(height),
-                'image_src': filename.replace('.mp4', '.png'),
+                'image_src': filename.replace('mp4', '%s' % file_format),
                 'src': filename
             })
 
