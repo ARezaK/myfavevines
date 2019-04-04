@@ -93,7 +93,6 @@ def index():
     images = []
     for root, dirs, files in os.walk('.'):
         for filename in [os.path.join(root, name) for name in files]:
-            print(filename)
             if not filename.endswith('.mp4'):
                 continue
             if not os.path.isfile(filename.replace('mp4', '%s' % file_format)):
