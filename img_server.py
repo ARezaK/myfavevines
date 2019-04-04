@@ -61,7 +61,7 @@ def generate_thumbnail(filename):
     count = 0
 
     while count < 25:
-        cv2.imwrite("%s.%s" % (filename.replace('.mp4', ''), file_format), image)  # save frame
+        cv2.imwrite("%s.%s" % (filename.replace('#', '%23').replace('.mp4', ''), file_format), image)  # save frame
         success, image = vidcap.read()
         count += 1
     print("all done")
@@ -95,12 +95,12 @@ def index():
         for filename in [os.path.join(root, name) for name in files]:
             if not filename.endswith('.mp4'):
                 continue
-            if not os.path.isfile(filename.replace('mp4', '%s' % file_format)):
+            if not os.path.isfile(filename.replace('#', '%23').replace('mp4', '%s' % file_format)):
                 # generate the image
                 print("need to generate")
                 generate_thumbnail(filename=filename)
 
-            im = Image.open(filename.replace('mp4', '%s' % file_format))
+            im = Image.open(filename.replace('#', '%23').replace('mp4', '%s' % file_format))
             w, h = im.size
             aspect = 1.0*w/h
             if aspect > 1.0*WIDTH/HEIGHT:
@@ -112,8 +112,8 @@ def index():
             images.append({
                 'width': int(width),
                 'height': int(height),
-                'image_src': filename.replace('mp4', '%s' % file_format),
-                'src': filename
+                'image_src': filename.replace('#', '%23').replace('mp4', '%s' % file_format),
+                'src': filename.replace('#', '%23')
             })
 
     return render_template_string(TEMPLATE, **{
