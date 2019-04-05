@@ -69,6 +69,7 @@ def generate_thumbnail(filename):
 
 @app.route('/<path:filename>')
 def image(filename):
+    print(filename)
     try:
         w = int(request.args['w'])
         h = int(request.args['h'])
@@ -122,4 +123,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, threaded=True)
+    app.run(host='0.0.0.0', debug=False, threaded=True)
